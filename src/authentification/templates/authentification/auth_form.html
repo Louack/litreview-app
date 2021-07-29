@@ -1,0 +1,25 @@
+{% extends 'litreview/base.html' %}
+{% load static %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/style.css' %}">{% endblock %}
+{% block main %}
+    {% if title  == 'Connexion'  %}
+        <div>
+            <form action="{% url 'signup' %}">
+                <input type="submit" value="S'inscrire">
+            </form>
+        </div>
+    {% endif %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {% for message in errors.values %}
+                <h3 style="color: red;">
+                    {{ message }}
+                </h3>
+            {% endfor %}
+            <input type="submit" value="{{ title }}">
+        </form>
+    </div>
+{% endblock %}

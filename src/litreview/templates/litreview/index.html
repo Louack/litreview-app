@@ -1,0 +1,10 @@
+{% extends 'litreview/base.html' %}
+{% load static %}
+
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/style.css' %}">{% endblock %}
+{% block main%}
+    <p>Homepage</p>
+    <form action="{% url 'logout' %}">
+        <input type="submit" value="Déconnexion">
+    </form>
+{% endblock %}
