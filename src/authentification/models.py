@@ -34,7 +34,7 @@ class CustomUser(AbstractBaseUser):
         blank=False
     )
     password = models.CharField(
-        verbose_name='Mode de passe',
+        verbose_name='Mot de passe',
         max_length=128
     )
     last_login = models.DateTimeField(

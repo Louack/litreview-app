@@ -8,6 +8,7 @@ class CustomSignUpForm(UserCreationForm):
 
         for attribute in ['password1', 'password2']:
             self.fields[attribute].help_text = None
+            self.fields[attribute].show_hidden_initial = True
 
     class Meta:
         model = CustomUser

@@ -1,6 +1,22 @@
+* { box-sizing: border-box;}
+
 body {
+    margin-left: 2.5%;
+    margin-right: 2.5%;
     background-color: SteelBlue;
     font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: solid ;
+}
+
+img {
+    color: white;
 }
 
 a {
@@ -8,7 +24,12 @@ a {
     color: inherit;
 }
 
+nav a {
+    margin: 1.5vw ;
+}
+
 main {
+    margin-top: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,5 +42,6 @@ form {
 
 div {
     margin: 50px;
-}
+    padding: 25px;
+    }
 

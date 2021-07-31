@@ -51,6 +51,12 @@ class CustomLogin(UserPassesTestMixin, LoginView):
 
 class CustomLogout(LoginRequiredMixin, LogoutView):
     template_name = 'authentification/logout.html'
+    title = 'Déconnexion'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        return context
 
     def handle_no_permission(self):
         return redirect('index')

@@ -3,12 +3,20 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>{{ title }}</title>
+        <title>LitReview | {{ title }}</title>
         {% block style %} {% endblock %}
     </head>
     <body>
         <header>
             <h1><a href="{% url 'index' %}">LitReview</a></h1>
+            {% if request.user.is_authenticated  %}
+                <nav>
+                    <a href="{% url 'index' %}" title="Flux">Flux</a>
+                    <a href="{% url 'index' %}" title="Posts">Posts</a>
+                    <a href="{% url 'index' %}" title="Abonnements">Abonnements</a>
+                    <a href="{% url 'logout' %}" title="Déconnexion">Déconnexion</a>
+                </nav>
+            {% endif %}
         </header>
         <main>
             {% block main %} {% endblock %}
