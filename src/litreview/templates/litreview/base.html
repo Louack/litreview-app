@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>LitReview | {{ title }}</title>
+        <title>LitReview {% if title  %}| {{ title }} {% endif %}</title>
         {% block style %} {% endblock %}
     </head>
     <body>
@@ -11,7 +11,7 @@
             <h1><a href="{% url 'index' %}">LitReview</a></h1>
             {% if request.user.is_authenticated  %}
                 <nav>
-                    <a href="{% url 'index' %}" title="Flux">Flux</a>
+                    <a href="{% url 'feed' %}" title="Flux">Flux</a>
                     <a href="{% url 'index' %}" title="Posts">Posts</a>
                     <a href="{% url 'index' %}" title="Abonnements">Abonnements</a>
                     <a href="{% url 'logout' %}" title="Déconnexion">Déconnexion</a>

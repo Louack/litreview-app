@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, 'litreview/index.html', context={'title': 'Accueil'})
+        return redirect('feed')
     else:
         return redirect('login')

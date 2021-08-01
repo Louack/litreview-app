@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
@@ -21,7 +22,7 @@ class Ticket(models.Model):
         blank=True,
         null=True
     )
-    time_created = models.DateField(
+    time_created = models.DateTimeField(
         verbose_name='Date',
         auto_now_add=True
     )
@@ -32,6 +33,9 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_verbose_name(self):
+        return self._meta.verbose_name
 
 
 class Review(models.Model):
@@ -60,7 +64,7 @@ class Review(models.Model):
         max_length=8192,
         blank=True
     )
-    time_created = models.DateField(
+    time_created = models.DateTimeField(
         verbose_name='Date',
         auto_now_add=True
     )
@@ -68,6 +72,15 @@ class Review(models.Model):
     class Meta:
         verbose_name = 'Revue'
         ordering = ['user']
+
+    def __str__(self):
+        name = self.user.username
+        ticket = self.ticket.title
+        title = 'Revue de ' + name + ' à ' + ticket
+        return title
+
+    def get_verbose_name(self):
+        return self._meta.verbose_name
 
 
 class UserFollows(models.Model):
@@ -89,3 +102,8 @@ class UserFollows(models.Model):
         verbose_name = 'Abonnement'
         ordering = ['user']
         unique_together = ('user', 'followed_user')
+
+    def save(self, *args, **kwargs):
+        if self.user == self.followed_user:
+            raise ValidationError("Un utilisateur ne peut pas s'abonner à lui-même")
+        super().save(*args, **kwargs)
