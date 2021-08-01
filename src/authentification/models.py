@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.utils.text import slugify
 
 
 class CustomUserManager(BaseUserManager):
@@ -58,4 +59,13 @@ class CustomUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    def get_unique_slug(self):
+        count = 0
+        for user in CustomUser.objects.all():
+            if slugify(user.username) == slugify(self.username):
+                count += 1
+        string = str(self.username) + '-' + str(count + 1)
+        slug = slugify(string)
+        return slug
 

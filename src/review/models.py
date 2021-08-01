@@ -37,6 +37,11 @@ class Ticket(models.Model):
     def get_verbose_name(self):
         return self._meta.verbose_name
 
+    def get_ticket_reviewers(self):
+        reviews = [review for review in self.review_set.all()]
+        reviewers = [review.user for review in reviews]
+        return reviewers
+
 
 class Review(models.Model):
     ticket = models.ForeignKey(
@@ -81,6 +86,12 @@ class Review(models.Model):
 
     def get_verbose_name(self):
         return self._meta.verbose_name
+
+    def save(self, *args, **kwargs):
+        reviewers = self.ticket.get_ticket_reviewers()
+        if self.user in reviewers:
+            raise ValidationError('Vous avez déjà revu ce ticket.')
+        super().save(*args, **kwargs)
 
 
 class UserFollows(models.Model):

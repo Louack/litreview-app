@@ -1,19 +1,24 @@
 from itertools import chain
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.views.generic import TemplateView
+from django.views.generic import ListView
 from .models import UserFollows
 
 
-class Feed(LoginRequiredMixin, TemplateView):
+class Feed(LoginRequiredMixin, ListView):
     template_name = 'review/feed.html'
     title = 'Flux'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def handle_no_permission(self):
+        return redirect('index')
+
+    def get_queryset(self):
         followed_users = self.get_followed_users()
         posts = self.all_posts_combined_and_sorted(followed_users)
-        context['posts'] = posts
+        return posts
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['title'] = self.title
         return context
 
@@ -65,5 +70,18 @@ class Feed(LoginRequiredMixin, TemplateView):
                              non_followers_reviews), key=lambda post: post.time_created, reverse=True)
         return posts
 
+
+class MyPosts(LoginRequiredMixin, ListView):
+    template_name = 'review/feed.html'
+    title = 'Mes Posts'
+
     def handle_no_permission(self):
         return redirect('index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        followed_users = self.get_followed_users()
+        posts = self.all_posts_combined_and_sorted(followed_users)
+        context['posts'] = posts
+        context['title'] = self.title
+        return context
