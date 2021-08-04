@@ -1,0 +1,58 @@
+{% extends 'litreview/base.html' %}
+{% load static %}
+
+{% block style %}{% endblock %}
+{% block main %}
+{% if  target_user == request.user %}
+<form method="POST">
+    {% csrf_token %}
+    {{ select_form.as_p }}
+    {% for message in errors %}
+                <h3 style="color: red;">
+                    {{ message }}
+                </h3>
+            {% endfor %}
+    <input type="submit" name ="select_follow" value="Suivre">
+</form>
+{% else %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ target_user }}
+        {{ foreign_form.as_p }}
+
+        {% if  request_user_in_subs == True %}
+            <input type="submit" name ="unfollow" value="Se désabonner">
+        {% else %}
+            <input type="submit" name ="target_follow" value="Suivre">
+        {% endif %}
+    </form>
+{% endif %}
+<div>
+    <div>{% for sub in subs %}
+        {% if  sub.sub_type == 'is_followed_by_user' %}
+            <div>
+                {{ target_user.username }} suit {{ sub.user.username }}
+                {% for form in unfollow_forms %}
+                    {% if form.initial.followed_user == sub.user %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input type="submit" name="unfollow" value="Se désabonner">
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+    <div>
+    {% for sub in subs %}
+        {% if  sub.sub_type == 'is_following_user' %}
+            <div>{{ sub.user.username }} suit {{ target_user.username }}</div>
+        {% endif %}
+    {% endfor %}
+
+    </div>
+</div>
+{{form.initial.user}}
+{% endblock %}

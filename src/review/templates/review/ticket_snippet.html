@@ -1,9 +1,9 @@
 <div>
     <h1>
         {% if request.user in post.get_ticket_reviewers %}
-        Vrai
+        Déjà répondu
         {% else %}
-        Pas Vrai
+        Pas encore répondu
         {% endif %}
     </h1>
     <h2>{{ post.user }}</h2>

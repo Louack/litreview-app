@@ -90,7 +90,7 @@ class Review(models.Model):
     def save(self, *args, **kwargs):
         reviewers = self.ticket.get_ticket_reviewers()
         if self.user in reviewers:
-            raise ValidationError('Vous avez déjà revu ce ticket.')
+            raise ValidationError('Cet utilisateur a déjà revu ce ticket.')
         super().save(*args, **kwargs)
 
 

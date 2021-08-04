@@ -12,8 +12,8 @@
             {% if request.user.is_authenticated  %}
                 <nav>
                     <a href="{% url 'feed' %}" title="Flux">Flux</a>
-                    <a href="{% url 'index' %}" title="Posts">Posts</a>
-                    <a href="{% url 'index' %}" title="Abonnements">Abonnements</a>
+                    <a href="{% url 'user-posts' request.user.slug %}" title="Posts">Posts</a>
+                    <a href="{% url 'user-subs' request.user.slug %}" title="Abonnements">Abonnements</a>
                     <a href="{% url 'logout' %}" title="Déconnexion">Déconnexion</a>
                 </nav>
             {% endif %}

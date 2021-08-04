@@ -4,14 +4,7 @@
 {% block style %}{% endblock %}
 {% block main %}
 <div>
-    <form action="{% url 'feed' %}">
-        <input type="submit" value="Demander une critique" />
-    </form>
-    <form action="{% url 'feed' %}">
-        <input type="submit" value="Créer une critique" />
-    </form>
-</div>
-<div>
+    {{ user.username }}
     {% for post in posts %}
         <div>{% if  post.get_verbose_name == 'Ticket' %}
             {% include 'review/ticket_snippet.html' %}
