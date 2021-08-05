@@ -1,0 +1,16 @@
+{% extends 'litreview/base.html' %}
+{% load static %}
+
+{% block style %}{% endblock %}
+{% block main %}
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        ticket
+        {{ form.ticket.as_p }}
+        critique
+        {{ form.review.as_p }}
+        <input type="submit" name ="select_follow" value="Créer">
+    </form>
+</div>
+{% endblock %}

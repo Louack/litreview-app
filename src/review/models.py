@@ -47,7 +47,9 @@ class Review(models.Model):
     ticket = models.ForeignKey(
         verbose_name='Ticket',
         to=Ticket,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     rating = models.PositiveSmallIntegerField(
         validators=[
@@ -89,8 +91,6 @@ class Review(models.Model):
 
     def save(self, *args, **kwargs):
         reviewers = self.ticket.get_ticket_reviewers()
-        if self.user in reviewers:
-            raise ValidationError('Cet utilisateur a déjà revu ce ticket.')
         super().save(*args, **kwargs)
 
 

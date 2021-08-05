@@ -4,10 +4,10 @@
 {% block style %}{% endblock %}
 {% block main %}
 <div>
-    <form action="{% url 'feed' %}">
+    <form action="{% url 'ticket-creation' %}">
         <input type="submit" value="Demander une critique" />
     </form>
-    <form action="{% url 'feed' %}">
+    <form action="{% url 'direct-review-creation' %}">
         <input type="submit" value="Créer une critique" />
     </form>
 </div>

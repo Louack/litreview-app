@@ -7,9 +7,9 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
-from django.views.generic.edit import CreateView, DeletionMixin, DeleteView
-from .forms import SelectFollowForm, LockedFollowForm
-from .models import UserFollows
+from django.views.generic.edit import CreateView, DeletionMixin, DeleteView, UpdateView
+from .forms import SelectFollowForm, LockedFollowForm, TicketForm, ReviewForm
+from .models import UserFollows, Ticket, Review
 from authentification.models import CustomUser
 
 
@@ -29,6 +29,7 @@ class Feed(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
+        print(context)
         return context
 
     def get_followed_users(self):
@@ -102,7 +103,6 @@ class UserPosts(LoginRequiredMixin, SingleObjectMixin, ListView):
         context['title'] = self.title
         context['user'] = self.object
         context['posts'] = self.object_list
-        print(context)
         return context
 
 
@@ -129,7 +129,7 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
         context['subs'] = self.object_list
         if self.request.user == self.object:
             subs_forms = self.get_home_subs_forms()
-            context['select_form'] = subs_forms['selected_form']
+            context['select_form'] = subs_forms['select_form']
             context['unfollow_forms'] = subs_forms['locked_forms']
         else:
             context['foreign_form'] = self.get_foreign_sub_form()
@@ -158,7 +158,7 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
                 can_unfollow.append(
                     LockedFollowForm(initial={'user': self.request.user, 'followed_user': couple.followed_user}))
         home_forms['locked_forms'] = can_unfollow
-        home_forms['selected_form'] = SelectFollowForm(initial={'user': self.request.user}, user=self.object)
+        home_forms['select_form'] = SelectFollowForm(initial={'user': self.request.user}, user=self.object)
         return home_forms
 
     def get_foreign_sub_form(self):
@@ -212,4 +212,75 @@ class UserSubsManagement(View):
     def post(self, request, *args, **kwargs):
         view = UserSubscriptionsUpdate.as_view()
         return view(request, *args, **kwargs)
+
+
+class PostCreation(CreateView):
+    template_name = 'review/ticket_edit.html'
+    post_type = None
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.post_type == 'review':
+            self.ticket = self.get_object(queryset=Ticket.objects.all())
+        return super().dispatch(request)
+
+    def form_valid(self, form):
+        if self.post_type == 'double':
+            if type(form) == TicketForm:
+                ticket = form.save(commit=False)
+                return ticket
+            if type(form) == ReviewForm:
+                review = form.save(commit=False)
+                review.ticket = self.ticket
+                self.ticket.save()
+                review.save()
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('feed')
+
+    def get_initial(self):
+        self.initial = {'user': self.request.user}
+        if self.post_type == 'review':
+            self.initial['ticket'] = self.ticket
+        return self.initial.copy()
+
+    def get_form(self, form_class=None):
+        if self.post_type == 'ticket':
+            return TicketForm(**self.get_form_kwargs())
+        elif self.post_type == 'review':
+            return ReviewForm(**self.get_form_kwargs())
+        elif self.post_type == 'double':
+            return {'ticket': TicketForm(**self.get_form_kwargs()),
+                    'review': ReviewForm(**self.get_form_kwargs())}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.post_type == 'review':
+            context['ticket'] = self.ticket
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        if self.post_type == 'double':
+            form = self.get_form()
+            if form['ticket'].is_valid():
+                self.ticket = self.form_valid(form['ticket'])
+                if form['review'].is_valid():
+                    return self.form_valid(form['review'])
+                else:
+                    return self.form_invalid(form)
+            else:
+                return self.form_invalid(form)
+        else:
+            return super().post(self, request, *args, **kwargs)
+
+
+class PostDeletion(DeleteView):
+    pass
+
+
+class PostUpdate(UpdateView):
+    pass
 
