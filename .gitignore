@@ -3,3 +3,4 @@ venvp9/
 .idea/
 migrations/
 db.sqlite3
+media/
