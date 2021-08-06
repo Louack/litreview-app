@@ -1,15 +1,12 @@
 <div>
-    <h1>
-        {% if request.user in post.get_ticket_reviewers %}
-        Déjà répondu
-        {% else %}
-        Pas encore répondu
-        {% endif %}
-    </h1>
     <h2>{{ post.user }}</h2>
     <h2>{{ post.title }}</h2>
-    <p>{{ post.description }}</p>
-    <p>pk = {{ post.pk }}</p>
+    {% if post.image %}
+        <img src="{{post.image.url}}">
+    {% endif %}
+
+
+
     {% if request.user not in post.get_ticket_reviewers %}
     <form action="{% url 'answer-review-creation' post.pk %}">
         <input type="submit" value="Répondre" />

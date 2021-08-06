@@ -8,9 +8,22 @@
     {% for post in posts %}
         <div>{% if  post.get_verbose_name == 'Ticket' %}
             {% include 'review/ticket_snippet.html' %}
+            <form action="{% url 'ticket-update' post.pk %}">
+        <input type="submit" value="Modifier" />
+    </form>
+    <form action="{% url 'ticket-delete' post.pk %}">
+        <input type="submit" value="Supprimer" />
+    </form>
         {% elif post.get_verbose_name == 'Revue' %}
             {% include 'review/review_snippet.html' %}
-        {% endif %}
-    {% endfor %}</div>
+             <form action="{% url 'review-update' post.pk %}">
+        <input type="submit" value="Modifier" />
+    </form>
+    <form action="{% url 'review-delete' post.pk %}">
+        <input type="submit" value="Supprimer" />
+    </form>
+
+        {% endif %}</div>
+    {% endfor %}
 </div>
 {% endblock %}

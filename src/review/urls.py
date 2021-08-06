@@ -9,8 +9,8 @@ urlpatterns = [
     path('ticket/create/', PostCreation.as_view(post_type='ticket'), name='ticket-creation'),
     path('review/create/answer-review/<str:pk>/', PostCreation.as_view(post_type='review'), name='answer-review-creation'),
     path('review/create/direct-review/', PostCreation.as_view(post_type='double'), name='direct-review-creation'),
-    path('ticket/update/<str:pk>/', PostUpdate.as_view(), name='ticket-update'),
-    path('review/update/<str:pk>/', PostUpdate.as_view(), name='review-update'),
-    path('ticket/delete/<str:pk>/', PostDeletion.as_view(), name='ticket-delete'),
-    path('review/delete/<str:pk>/', PostDeletion.as_view(), name='review-delete'),
+    path('ticket/update/<str:pk>/', PostUpdate.as_view(post_type='ticket'), name='ticket-update'),
+    path('review/update/<str:pk>/', PostUpdate.as_view(post_type='review'), name='review-update'),
+    path('ticket/delete/<str:pk>/', PostDeletion.as_view(post_type='ticket'), name='ticket-delete'),
+    path('review/delete/<str:pk>/', PostDeletion.as_view(post_type='review'), name='review-delete'),
 ]

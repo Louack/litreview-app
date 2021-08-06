@@ -20,7 +20,8 @@ class Ticket(models.Model):
     )
     image = models.ImageField(
         blank=True,
-        null=True
+        null=True,
+        upload_to='images/'
     )
     time_created = models.DateTimeField(
         verbose_name='Date',
@@ -48,8 +49,6 @@ class Review(models.Model):
         verbose_name='Ticket',
         to=Ticket,
         on_delete=models.CASCADE,
-        blank=True,
-        null=True
     )
     rating = models.PositiveSmallIntegerField(
         validators=[
@@ -88,10 +87,6 @@ class Review(models.Model):
 
     def get_verbose_name(self):
         return self._meta.verbose_name
-
-    def save(self, *args, **kwargs):
-        reviewers = self.ticket.get_ticket_reviewers()
-        super().save(*args, **kwargs)
 
 
 class UserFollows(models.Model):

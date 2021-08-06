@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectMixin
@@ -29,7 +29,6 @@ class Feed(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
-        print(context)
         return context
 
     def get_followed_users(self):
@@ -194,7 +193,7 @@ class UserSubscriptionsUpdate(LoginRequiredMixin, DeletionMixin, CreateView):
 
     def get_userfollows(self):
         userfollows = UserFollows.objects.filter(user_id=self.request.POST['user'],
-                                                      followed_user=self.request.POST['followed_user'])
+                                                 followed_user=self.request.POST['followed_user'])
         return userfollows
 
     def delete(self, request, *args, **kwargs):
@@ -217,6 +216,7 @@ class UserSubsManagement(View):
 class PostCreation(CreateView):
     template_name = 'review/ticket_edit.html'
     post_type = None
+    success_url = reverse_lazy('feed')
 
     def dispatch(self, request, *args, **kwargs):
         if self.post_type == 'review':
@@ -226,19 +226,12 @@ class PostCreation(CreateView):
     def form_valid(self, form):
         if self.post_type == 'double':
             if type(form) == TicketForm:
-                ticket = form.save(commit=False)
-                return ticket
+                return form.save()
             if type(form) == ReviewForm:
-                review = form.save(commit=False)
-                review.ticket = self.ticket
-                self.ticket.save()
-                review.save()
+                form.save()
                 return HttpResponseRedirect(self.get_success_url())
-            else:
-                return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('feed')
+        else:
+            return super().form_valid(form)
 
     def get_initial(self):
         self.initial = {'user': self.request.user}
@@ -267,9 +260,12 @@ class PostCreation(CreateView):
             form = self.get_form()
             if form['ticket'].is_valid():
                 self.ticket = self.form_valid(form['ticket'])
+                form['review'].data = form['review'].data.copy()
+                form['review'].data['ticket'] = self.ticket
                 if form['review'].is_valid():
                     return self.form_valid(form['review'])
                 else:
+                    self.ticket.delete()
                     return self.form_invalid(form)
             else:
                 return self.form_invalid(form)
@@ -278,9 +274,34 @@ class PostCreation(CreateView):
 
 
 class PostDeletion(DeleteView):
-    pass
+    template_name = 'review/delete_post.html'
+    post_type = None
+    context_object_name = 'post'
+    success_url = reverse_lazy('feed')
+
+    def get_queryset(self):
+        if self.post_type == 'ticket':
+            self.queryset = Ticket.objects.all()
+        elif self.post_type == 'review':
+            self.queryset = Review.objects.all()
+        return self.queryset
 
 
 class PostUpdate(UpdateView):
-    pass
+    template_name = 'review/ticket_edit.html'
+    post_type = None
+    context_object_name = 'post'
+    success_url = reverse_lazy('feed')
 
+    def get_form(self, form_class=None):
+        if self.post_type == 'ticket':
+            return TicketForm(**self.get_form_kwargs())
+        elif self.post_type == 'review':
+            return ReviewForm(**self.get_form_kwargs())
+
+    def get_queryset(self):
+        if self.post_type == 'ticket':
+            self.queryset = Ticket.objects.all()
+        elif self.post_type == 'review':
+            self.queryset = Review.objects.all()
+        return self.queryset
