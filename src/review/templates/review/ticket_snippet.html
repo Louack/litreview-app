@@ -1,15 +1,30 @@
-<div>
-    <h2>{{ post.user }}</h2>
-    <h2>{{ post.title }}</h2>
+<div class="ticket-display">
+    <div class="ticket-display-head">
+        {% if post.user != request.user %}
+            <p><a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.user }}</a> a demandé une critique</p>
+        {% else %}
+            <p>Vous avez demandé une critique</p>
+        {% endif %}
+        <p>{{ post.time_created }}</p>
+    </div>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.description }}</p>
     {% if post.image %}
         <img src="{{post.image.url}}">
     {% endif %}
-
-
-
     {% if request.user not in post.get_ticket_reviewers %}
-    <form action="{% url 'answer-review-creation' post.pk %}">
-        <input type="submit" value="Répondre" />
-    </form>
+        <form action="{% url 'answer-review-creation' post.pk %}">
+            <input type="submit" value="Répondre" />
+        </form>
+    {% endif %}
+    {% if request.user == post.user %}
+        {% if not post.get_ticket_reviewers %}
+            <form action="{% url 'ticket-update' post.pk %}">
+                <input type="submit" value="Modifier" />
+            </form>
+            <form action="{% url 'ticket-delete' post.pk %}">
+                <input type="submit" value="Supprimer" />
+            </form>
+        {% endif %}
     {% endif %}
 </div>

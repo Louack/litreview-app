@@ -133,8 +133,9 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
         else:
             context['foreign_form'] = self.get_foreign_sub_form()
             for sub in context['subs']:
-                if self.request.user == sub['user']:
+                if self.request.user == sub['user'] and sub['sub_type'] == 'is_following_user':
                     context['request_user_in_subs'] = True
+        print(context)
         return context
 
     def get_followed_and_following_users(self):
@@ -213,7 +214,7 @@ class UserSubsManagement(View):
         return view(request, *args, **kwargs)
 
 
-class PostCreation(CreateView):
+class PostCreation(LoginRequiredMixin, CreateView):
     template_name = 'review/ticket_edit.html'
     post_type = None
     success_url = reverse_lazy('feed')
@@ -273,7 +274,7 @@ class PostCreation(CreateView):
             return super().post(self, request, *args, **kwargs)
 
 
-class PostDeletion(DeleteView):
+class PostDeletion(LoginRequiredMixin, DeleteView):
     template_name = 'review/delete_post.html'
     post_type = None
     context_object_name = 'post'
@@ -287,7 +288,7 @@ class PostDeletion(DeleteView):
         return self.queryset
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
     template_name = 'review/ticket_edit.html'
     post_type = None
     context_object_name = 'post'

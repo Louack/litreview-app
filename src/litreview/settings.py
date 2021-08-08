@@ -129,7 +129,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'authentification.CustomUser'
-PAGINATION = 100
+PAGINATION = 10
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'litreview/media/')
 MEDIA_URL = "litreview/media/"

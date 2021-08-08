@@ -66,7 +66,7 @@ class Review(models.Model):
         max_length=128
     )
     body = models.CharField(
-        verbose_name='Description',
+        verbose_name='Commentaire',
         max_length=8192,
         blank=True
     )
@@ -76,7 +76,7 @@ class Review(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Revue'
+        verbose_name = 'Critique'
         ordering = ['user']
 
     def __str__(self):

@@ -3,6 +3,7 @@
 
 {% block style %}{% endblock %}
 {% block main %}
+<h2>{{ target_user.username }}</h2>
 {% if  target_user == request.user %}
     {% if select_form.fields.followed_user.choices %}
     <form method="POST">
@@ -14,22 +15,30 @@
     Vous êtes abonné à tous les utilisateurs du site !!!
     {% endif %}
 {% else %}
+    <a href="{% url 'user-posts' target_user.slug %}">Posts de {{ target_user.username }}</a>
     <form method="POST">
         {% csrf_token %}
-        {{ target_user }}
         {{ foreign_form.as_p }}
         {% if  request_user_in_subs == True %}
+            <p>Vous suivez {{ target_user.username }}</p>
             <input type="submit" name ="unfollow" value="Se désabonner">
         {% else %}
+            <p>Vous ne suivez pas {{ target_user.username }}</p>
             <input type="submit" name ="target_follow" value="Suivre">
         {% endif %}
     </form>
 {% endif %}
-<div>
-    <div>{% for sub in subs %}
+<div class="followed-and-followers">
+    <div class="followed-users">
+        <h3>Abonnements</h3>
+        {% for sub in subs %}
         {% if  sub.sub_type == 'is_followed_by_user' %}
-            <div>
-                {{ target_user.username }} suit <a href="{% url 'user-posts' sub.user.slug %}" title="{{ sub.user.username }}">{{ sub.user.username }}</a>
+            <div class="followed-user">
+                {% if  sub.user == request.user %}
+                    <p>{{ request.user.username }} (Vous)</p>
+                {% else %}
+                    <p><a href="{% url 'user-posts' sub.user.slug %}" title="{{ sub.user.username }}">{{ sub.user.username }}</a></p>
+                {% endif %}
                 {% for form in unfollow_forms %}
                     {% if form.initial.followed_user == sub.user %}
                         <form method="POST">
@@ -43,14 +52,19 @@
         {% endif %}
     {% endfor %}
     </div>
-    <div>
+    <div class="followers">
+        <h3>Abonnés</h3>
     {% for sub in subs %}
         {% if  sub.sub_type == 'is_following_user' %}
-            <div><a href="{% url 'user-posts' sub.user.slug %}" title="{{ sub.user.username }}">{{ sub.user.username }}</a> suit {{ target_user.username }}</div>
+            <div class="follower">
+                {% if  sub.user == request.user %}
+                    <p>{{ request.user.username }} (Vous)</p>
+                {% else %}
+                    <p><a href="{% url 'user-posts' sub.user.slug %}" title="{{ sub.user.username }}">{{ sub.user.username }}</a></p>
+                {% endif %}
+            </div>
         {% endif %}
     {% endfor %}
-
     </div>
 </div>
-{{form.initial.user}}
 {% endblock %}

@@ -1,9 +1,37 @@
-<div>
-  <h2>{{ post.headline }}</h2>
+<div class="review-display">
+  <div class="review-display-head">
+        {% if post.user != request.user %}
+            <p><a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.user }}</a> a publié une critique</p>
+        {% else %}
+            <p>Vous avez publié une critique</p>
+        {% endif %}
+        <p>{{ post.time_created }}</p>
+    </div>
+  <h3>{{ post.headline }}</h3>
   <p>note = {{ post.rating }} </p>
   <p>{{ post.body }}</p>
-  <div>
-    <h2>{{ post.review.user }}</h2>
-    <h2>{{ post.review.title }}</h2>
+  <div class="ticket-in-review-display">
+      {% if post.user != request.user %}
+        <p>Ticket - <a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.ticket.user }}</a></p>
+      {% else %}
+        <p>Ticket - Vous</p>
+      {% endif %}
+      <h3>{{ post.ticket.title}}</h3>
+      {% if post.image %}
+        <img src="{{post.ticket.image.url}}">
+      {% endif %}
+      {% if request.user not in post.ticket.get_ticket_reviewers %}
+        <form action="{% url 'answer-review-creation' post.ticket.pk %}">
+            <input type="submit" value="Répondre" />
+        </form>
+      {% endif %}
   </div>
+    {% if request.user == post.user %}
+        <form action="{% url 'review-update' post.pk %}">
+            <input type="submit" value="Modifier" />
+        </form>
+        <form action="{% url 'review-delete' post.pk %}">
+            <input type="submit" value="Supprimer" />
+        </form>
+    {% endif %}
 </div>

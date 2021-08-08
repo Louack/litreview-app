@@ -3,21 +3,15 @@
 
 {% block style %}{% endblock %}
 {% block main %}
-<div>
-    <form action="{% url 'ticket-creation' %}">
-        <input type="submit" value="Demander une critique" />
-    </form>
-    <form action="{% url 'direct-review-creation' %}">
-        <input type="submit" value="Créer une critique" />
-    </form>
-</div>
-<div>
-    {% for post in posts %}
-        <div>{% if  post.get_verbose_name == 'Ticket' %}
-            {% include 'review/ticket_snippet.html' %}
-        {% elif post.get_verbose_name == 'Revue' %}
-            {% include 'review/review_snippet.html' %}
-        {% endif %}
-    {% endfor %}</div>
-</div>
+    <div class="feed-creation-button">
+        <form class="button" action="{% url 'ticket-creation' %}">
+            <input type="submit" value="Demander une critique">
+        </form>
+        <form class="button" action="{% url 'direct-review-creation' %}">
+            <input type="submit" value="Créer une critique">
+        </form>
+    </div>
+
+    {% include 'review/posts_list_snippet.html' %}
+    {% include 'review/pagination_snippet.html' %}
 {% endblock %}

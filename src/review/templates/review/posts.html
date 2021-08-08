@@ -4,26 +4,10 @@
 {% block style %}{% endblock %}
 {% block main %}
 <div>
-    {{ user.username }}
-    {% for post in posts %}
-        <div>{% if  post.get_verbose_name == 'Ticket' %}
-            {% include 'review/ticket_snippet.html' %}
-            <form action="{% url 'ticket-update' post.pk %}">
-        <input type="submit" value="Modifier" />
-    </form>
-    <form action="{% url 'ticket-delete' post.pk %}">
-        <input type="submit" value="Supprimer" />
-    </form>
-        {% elif post.get_verbose_name == 'Revue' %}
-            {% include 'review/review_snippet.html' %}
-             <form action="{% url 'review-update' post.pk %}">
-        <input type="submit" value="Modifier" />
-    </form>
-    <form action="{% url 'review-delete' post.pk %}">
-        <input type="submit" value="Supprimer" />
-    </form>
-
-        {% endif %}</div>
-    {% endfor %}
+    <h2>{{ user.username }}</h2>
+    {% if user != request.user%}
+        <a href="{% url 'user-subs' user.slug %}">Abonnements de {{ user.username }}</a>
+    {% endif %}
+    {% include 'review/posts_list_snippet.html' %}
 </div>
 {% endblock %}
