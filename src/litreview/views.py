@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 
 def index(request):
@@ -6,3 +6,11 @@ def index(request):
         return redirect('feed')
     else:
         return redirect('login')
+
+
+def error_403(request, exception):
+    return render(request, 'litreview/403_error.html')
+
+
+def error_404(request, exception):
+    return render(request, 'litreview/404_error.html')

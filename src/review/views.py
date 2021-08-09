@@ -1,6 +1,6 @@
 from itertools import chain
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
@@ -302,8 +302,15 @@ class PostCreation(LoginRequiredMixin, CreateView):
             else:
                 return self.form_invalid(form)
 
+    def test_func(self):
+        if not self.request.user.is_authenticated:
+            return True
 
-class PostDeletion(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        return redirect('index')
+
+
+class PostDeletion(UserPassesTestMixin, DeleteView):
     template_name = 'review/delete_post.html'
     post_type = None
     context_object_name = 'post'
@@ -316,8 +323,13 @@ class PostDeletion(LoginRequiredMixin, DeleteView):
             self.queryset = Review.objects.all()
         return self.queryset
 
+    def test_func(self):
+        self.object = self.get_object()
+        if self.request.user.is_authenticated and self.request.user == self.object.user:
+            return True
 
-class PostUpdate(LoginRequiredMixin, UpdateView):
+
+class PostUpdate(UserPassesTestMixin, UpdateView):
     template_name = 'review/simple_post_edit.html'
     post_type = None
     success_url = reverse_lazy('feed')
@@ -336,7 +348,6 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
             return {'review': ReviewForm(**self.get_form_kwargs())}
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
         if self.post_type == 'ticket':
             form = self.get_form()
             if form['ticket'].is_valid():
@@ -356,3 +367,9 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
         elif self.post_type == 'review':
             self.queryset = Review.objects.all()
         return self.queryset
+
+    def test_func(self):
+        self.object = self.get_object()
+        if self.request.user == self.object.user:
+            return True
+

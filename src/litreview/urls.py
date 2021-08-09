@@ -25,3 +25,7 @@ urlpatterns = [
     path('auth/', include('authentification.urls')),
     path('litreview/', include('review.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler403 = 'litreview.views.error_403'
+
+handler404 = 'litreview.views.error_404'
