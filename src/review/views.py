@@ -126,16 +126,16 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
         context['title'] = self.title
         context['target_user'] = self.object
         context['subs'] = self.object_list
+        context['is_following_user'] = self.get_lists_by_sub_type()['is_following_user']
+        context['is_followed_by_user'] = self.get_lists_by_sub_type()['is_followed_by_user']
         if self.request.user == self.object:
             subs_forms = self.get_home_subs_forms()
             context['select_form'] = subs_forms['select_form']
             context['unfollow_forms'] = subs_forms['locked_forms']
         else:
             context['foreign_form'] = self.get_foreign_sub_form()
-            for sub in context['subs']:
-                if self.request.user == sub['user'] and sub['sub_type'] == 'is_following_user':
-                    context['request_user_in_subs'] = True
-        print(context)
+            if self.request.user in context['is_following_user']:
+                context['request_user_in_subs'] = True
         return context
 
     def get_followed_and_following_users(self):
@@ -148,6 +148,15 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
                 subs.append({'user': couple.user, 'sub_type': 'is_following_user'})
         subs = sorted(subs, key=lambda x: x['user'].username)
         return subs
+
+    def get_lists_by_sub_type(self):
+        sub_types = {'is_followed_by_user': [], 'is_following_user': []}
+        for sub in self.object_list:
+            if sub['sub_type'] == 'is_followed_by_user':
+                sub_types['is_followed_by_user'].append(sub['user'])
+            else:
+                sub_types['is_following_user'].append(sub['user'])
+        return sub_types
 
     def get_home_subs_forms(self):
         couples = UserFollows.objects.all()
@@ -215,9 +224,7 @@ class UserSubsManagement(View):
 
 
 class PostCreation(LoginRequiredMixin, CreateView):
-    template_name = 'review/ticket_edit.html'
     post_type = None
-    success_url = reverse_lazy('feed')
 
     def dispatch(self, request, *args, **kwargs):
         if self.post_type == 'review':
@@ -242,23 +249,35 @@ class PostCreation(LoginRequiredMixin, CreateView):
 
     def get_form(self, form_class=None):
         if self.post_type == 'ticket':
-            return TicketForm(**self.get_form_kwargs())
+            return {'ticket': TicketForm(**self.get_form_kwargs())}
         elif self.post_type == 'review':
-            return ReviewForm(**self.get_form_kwargs())
+            return {'review': ReviewForm(**self.get_form_kwargs())}
         elif self.post_type == 'double':
             return {'ticket': TicketForm(**self.get_form_kwargs()),
                     'review': ReviewForm(**self.get_form_kwargs())}
 
+    def get_template_names(self):
+        if self.post_type == 'double':
+            self.template_name = 'review/double_posts_edit.html'
+        else:
+            self.template_name = 'review/simple_post_edit.html'
+        return self.template_name
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['edit_type'] = 'creation'
         if self.post_type == 'review':
             context['ticket'] = self.ticket
         return context
+
+    def get_success_url(self):
+        return reverse('feed')
 
     def post(self, request, *args, **kwargs):
         self.object = None
         if self.post_type == 'double':
             form = self.get_form()
+            print(form['ticket'])
             if form['ticket'].is_valid():
                 self.ticket = self.form_valid(form['ticket'])
                 form['review'].data = form['review'].data.copy()
@@ -270,8 +289,18 @@ class PostCreation(LoginRequiredMixin, CreateView):
                     return self.form_invalid(form)
             else:
                 return self.form_invalid(form)
-        else:
-            return super().post(self, request, *args, **kwargs)
+        elif self.post_type == 'ticket':
+            form = self.get_form()
+            if form['ticket'].is_valid():
+                return self.form_valid(form['ticket'])
+            else:
+                return self.form_invalid(form)
+        elif self.post_type == 'review':
+            form = self.get_form()
+            if form['review'].is_valid():
+                return self.form_valid(form['review'])
+            else:
+                return self.form_invalid(form)
 
 
 class PostDeletion(LoginRequiredMixin, DeleteView):
@@ -289,16 +318,37 @@ class PostDeletion(LoginRequiredMixin, DeleteView):
 
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
-    template_name = 'review/ticket_edit.html'
+    template_name = 'review/simple_post_edit.html'
     post_type = None
-    context_object_name = 'post'
     success_url = reverse_lazy('feed')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['edit_type'] = 'update'
+        if self.post_type == 'review':
+            context['ticket'] = self.object.ticket
+        return context
 
     def get_form(self, form_class=None):
         if self.post_type == 'ticket':
-            return TicketForm(**self.get_form_kwargs())
+            return {'ticket': TicketForm(**self.get_form_kwargs())}
         elif self.post_type == 'review':
-            return ReviewForm(**self.get_form_kwargs())
+            return {'review': ReviewForm(**self.get_form_kwargs())}
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.post_type == 'ticket':
+            form = self.get_form()
+            if form['ticket'].is_valid():
+                return self.form_valid(form['ticket'])
+            else:
+                return self.form_invalid(form)
+        elif self.post_type == 'review':
+            form = self.get_form()
+            if form['review'].is_valid():
+                return self.form_valid(form['review'])
+            else:
+                return self.form_invalid(form)
 
     def get_queryset(self):
         if self.post_type == 'ticket':

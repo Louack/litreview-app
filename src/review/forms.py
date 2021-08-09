@@ -2,6 +2,8 @@ from django import forms
 from .models import UserFollows, Ticket, Review
 from authentification.models import CustomUser
 
+RATING_SCALE = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
+
 
 class SelectFollowForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
@@ -33,7 +35,8 @@ class LockedFollowForm(forms.ModelForm):
     class Meta:
         model = UserFollows
         fields = ['user', 'followed_user']
-        widgets = {'user': forms.HiddenInput(), 'followed_user': forms.HiddenInput()}
+        widgets = {'user': forms.HiddenInput(),
+                   'followed_user': forms.HiddenInput()}
 
 
 class TicketForm(forms.ModelForm):
@@ -47,7 +50,9 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         exclude = ['time_created']
-        widgets = {'ticket': forms.HiddenInput(), 'user': forms.HiddenInput()}
+        widgets = {'ticket': forms.HiddenInput(),
+                   'user': forms.HiddenInput(),
+                   'rating': forms.RadioSelect(choices=RATING_SCALE)}
 
 
 

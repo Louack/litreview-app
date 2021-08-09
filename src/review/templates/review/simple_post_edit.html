@@ -1,0 +1,42 @@
+{% extends 'litreview/base.html' %}
+{% load static %}
+
+{% block style %}{% endblock %}
+{% block main %}
+<div class="post-edit">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.ticket %}
+            {% include 'review/ticket_edit_snippet.html' %}
+        {% else %}
+            <div class="ticket-wrapper">
+                <p>Vous êtes en train de poster en réponse à</p>
+                <div class="ticket-peak">
+                    <div class="ticket-peak-head">
+                        {% if ticket.user != request.user %}
+                            <p><a href="{% url 'user-posts' user.slug %}" title="profil">{{ ticket.user.username }}</a> a demandé une critique</p>
+                        {% else %}
+                            <p>Vous avez demandé une critique</p>
+                        {% endif %}
+                        <p>{{ ticket.time_created }}</p>
+                    </div>
+                    <h3>{{ ticket.title }}</h3>
+                    <p>{{ ticket.description }}</p>
+                    {% if ticket.image %}
+                        <img src="{{ ticket.image.url }}">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="review-edit-wrapper">
+                <h3>Critique</h3>
+                {% include 'review/review_edit_snippet.html' %}
+            </div>
+        {% endif %}
+            {% if edit_type == 'creation' %}
+                <input type="submit" name ="creation" value="Créer">
+            {% elif edit_type == 'update' %}
+                <input type="submit" name ="update" value="Modifier">
+            {% endif %}
+    </form>
+</div>
+{% endblock %}

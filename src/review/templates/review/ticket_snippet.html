@@ -1,7 +1,7 @@
 <div class="ticket-display">
     <div class="ticket-display-head">
         {% if post.user != request.user %}
-            <p><a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.user }}</a> a demandé une critique</p>
+            <p><a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.user.username }}</a> a demandé une critique</p>
         {% else %}
             <p>Vous avez demandé une critique</p>
         {% endif %}

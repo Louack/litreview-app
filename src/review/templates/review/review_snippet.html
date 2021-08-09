@@ -11,8 +11,8 @@
   <p>note = {{ post.rating }} </p>
   <p>{{ post.body }}</p>
   <div class="ticket-in-review-display">
-      {% if post.user != request.user %}
-        <p>Ticket - <a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.ticket.user }}</a></p>
+      {% if post.ticket.user != request.user %}
+        <p>Ticket - <a href="{% url 'user-posts' post.ticket.user.slug %}" title="profil">{{ post.ticket.user }}</a></p>
       {% else %}
         <p>Ticket - Vous</p>
       {% endif %}

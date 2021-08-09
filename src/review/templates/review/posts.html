@@ -1,13 +1,20 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/general.css' %}">{% endblock %}
 {% block main %}
-<div>
-    <h2>{{ user.username }}</h2>
-    {% if user != request.user%}
-        <a href="{% url 'user-subs' user.slug %}">Abonnements de {{ user.username }}</a>
-    {% endif %}
-    {% include 'review/posts_list_snippet.html' %}
-</div>
+    <div>
+        <h2>{{ user.username }}</h2>
+        {% if user != request.user %}
+            <a href="{% url 'user-subs' user.slug %}">Abonnements de {{ user.username }}</a>
+        {% endif %}
+        <h3>Posts</h3>
+        {% if page_obj %}
+            {% include 'review/posts_list_snippet.html' %}
+        {% else %}
+            <div>
+                <p>Aucun post</p>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'litreview/base.html' %}
+{% load static %}
+
+{% block style %}{% endblock %}
+{% block main %}
+<div class="post-edit">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="ticket-edit-wrapper">
+            <h3>Livre / Article</h3>
+        {% include 'review/ticket_edit_snippet.html' %}
+        </div>
+        <div class="review-edit-wrapper">
+            <h3>Critique</h3>
+            {% include 'review/review_edit_snippet.html' %}
+        </div>
+             <input type="submit" name ="ticket-review-creation" value="Créer">
+    </form>
+</div>
+{% endblock %}

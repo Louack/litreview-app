@@ -1,10 +1,15 @@
 <div class="posts-list">
-    <h3>Posts</h3>
-    {% for post in page_obj %}
-        {% if  post.get_verbose_name == 'Ticket' %}
-            {% include 'review/ticket_snippet.html' %}
-        {% elif post.get_verbose_name == 'Critique' %}
-            {% include 'review/review_snippet.html' %}
-        {% endif %}
-    {% endfor %}
+    {% if page_obj %}
+        {% for post in page_obj %}
+            {% if  post.get_verbose_name == 'Ticket' %}
+                {% include 'review/ticket_snippet.html' %}
+            {% elif post.get_verbose_name == 'Critique' %}
+                {% include 'review/review_snippet.html' %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div>
+            <p>Aucun post.</p>
+        </div>
+    {% endif %}
 </div>

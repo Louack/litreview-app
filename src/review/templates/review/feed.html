@@ -1,7 +1,7 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/general.css' %}">{% endblock %}
 {% block main %}
     <div class="feed-creation-button">
         <form class="button" action="{% url 'ticket-creation' %}">
@@ -11,7 +11,12 @@
             <input type="submit" value="Créer une critique">
         </form>
     </div>
-
-    {% include 'review/posts_list_snippet.html' %}
-    {% include 'review/pagination_snippet.html' %}
+    {% if page_obj %}
+        {% include 'review/posts_list_snippet.html' %}
+        {% include 'review/pagination_snippet.html' %}
+    {% else %}
+        <div>
+            <p>Créez tickets et critiques ou abonnez-vous à d'autres utilisateurs pour alimenter votre flux</p>
+        </div>
+    {% endif %}
 {% endblock %}
