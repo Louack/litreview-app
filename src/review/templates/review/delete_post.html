@@ -1,13 +1,20 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/post_edit.css' %}">{% endblock %}
 {% block main %}
 <div>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>Voulez-vous vraiment supprimer {{ post.title }}</p>
-        <input type="submit" name ="select_follow" value="Supprimer">
+        <div class="delete">
+            <p>Voulez-vous vraiment supprimer {{ post.title }}</p>
+            <div class="delete-buttons">
+                <input type="submit" name ="select_follow" value="Supprimer">
+                <form action="{% url 'feed' %}">
+                    <input type="submit" value="Retour vers le flux" />
+                </form>
+            </div>
+        </div>
     </form>
 </div>
 {% endblock %}

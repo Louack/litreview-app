@@ -9,8 +9,13 @@ def index(request):
 
 
 def error_403(request, exception):
-    return render(request, 'litreview/403_error.html')
+    response = render(request, 'litreview/403_error.html')
+    response.status_code = 403
+    return response
 
 
 def error_404(request, exception):
-    return render(request, 'litreview/404_error.html')
+    response = render(request, 'litreview/404_error.html')
+    response.status_code = 404
+    return response
+

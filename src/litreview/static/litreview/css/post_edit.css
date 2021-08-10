@@ -1,0 +1,98 @@
+.post-edit {
+    border:solid;
+    padding: 20px;
+    width: 60vw;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-edit {
+    border:solid;
+    padding: 20px;
+}
+
+.submit-double {
+    margin:auto;
+}
+
+.ticket-wrapper {
+    padding-bottom: 20px;
+}
+
+.ticket-edit-wrapper {
+    padding-bottom: 20px;
+}
+
+.ticket-peak {
+    border:solid;
+    padding: 20px;
+}
+
+.ticket-peak-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.review-edit-wrapper {
+    border-top: solid;
+    padding-top: 20px;
+}
+
+.ticket-title-edit {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.ticket-title-edit input{
+    max-width: 400px;
+}
+
+.ticket-description-edit {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.ticket-image-edit {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.review-headline-edit {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.review-headline-edit input {
+    max-width: 400px;
+}
+
+.review-body-edit {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+.review-body-edit input {
+    max-width: 400px;
+}
+
+.review-rating-edit ul{
+    display: flex;
+}
+
+li {
+    margin: 10px;
+    list-style: none;
+}
+
+.delete {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

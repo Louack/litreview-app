@@ -51,6 +51,7 @@ class Review(models.Model):
         on_delete=models.CASCADE,
     )
     rating = models.PositiveSmallIntegerField(
+        verbose_name='Note',
         validators=[
             MinValueValidator(0),
             MaxValueValidator(5),

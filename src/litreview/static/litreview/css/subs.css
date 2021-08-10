@@ -1,0 +1,87 @@
+.followed-and-followers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60vw;
+}
+
+.followed-and-followers h3 {
+    margin: auto;
+    margin-top: 20px;
+}
+
+.followed-and-followers a {
+    margin: 0;
+}
+
+.followed-users {
+    border-top: solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.followers {
+    border-top: solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.followed-user {
+    border-bottom: solid;
+    border-right: solid;
+    border-left: solid;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.followed-user * {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.follower {
+    border-bottom: solid;
+    border-right: solid;
+    border-left: solid;
+    display: flex;
+    align-items: center;
+}
+
+.follower * {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.followed-user a {
+    margin-right: 10px;
+}
+
+.status-with-target form {
+    display: flex;
+    align-items: center;
+}
+
+.status-with-target form p{
+    margin-right: 10px;
+}
+
+.subs-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.subs-head form {
+    margin: auto;
+    padding-bottom: 20px;
+    border-bottom: solid;
+    padding-top: 20px;
+    border-top: solid;
+}
+
+.subs-head h2 {
+    margin: auto;
+    margin-bottom: 15px;
+}

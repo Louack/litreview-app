@@ -1,36 +1,42 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/general.css' %}">{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/subs.css' %}">{% endblock %}
 {% block main %}
-    <h2>{{ target_user.username }}</h2>
-    {% if  target_user == request.user %}
-        {% if select_form.fields.followed_user.choices %}
+    <div class="subs-head">
+        <h2>{{ target_user.username }}</h2>
+        {% if  target_user == request.user %}
+            {% if select_form.fields.followed_user.choices %}
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ select_form }}
+                    <input type="submit" name ="select_follow" value="Suivre">
+                </form>
+            {% else %}
+                Il n'y a aucun utilisateur à suivre pour l'instant
+
+            {% endif %}
+    </div>
+        {% else %}
+            <a href="{% url 'user-posts' target_user.slug %}">Voir les publications de {{ target_user.username }}</a>
+    </div>
+        <div class="status-with-target">
             <form method="POST">
                 {% csrf_token %}
-                {{ select_form }}
-                <input type="submit" name ="select_follow" value="Suivre">
+                {{ foreign_form }}
+                {% if  request_user_in_subs == True %}
+                    <p>Vous suivez {{ target_user.username }}</p>
+                    <input type="submit" name ="unfollow" value="Se désabonner">
+                {% else %}
+                    <p>Vous ne suivez pas {{ target_user.username }}</p>
+                    <input type="submit" name ="target_follow" value="Suivre">
+                {% endif %}
             </form>
-        {% else %}
-            Vous êtes abonné à tous les utilisateurs du site !!!
-        {% endif %}
-    {% else %}
-        <a href="{% url 'user-posts' target_user.slug %}">Posts de {{ target_user.username }}</a>
-        <form method="POST">
-            {% csrf_token %}
-            {{ foreign_form }}
-            {% if  request_user_in_subs == True %}
-                <p>Vous suivez {{ target_user.username }}</p>
-                <input type="submit" name ="unfollow" value="Se désabonner">
-            {% else %}
-                <p>Vous ne suivez pas {{ target_user.username }}</p>
-                <input type="submit" name ="target_follow" value="Suivre">
-            {% endif %}
-        </form>
+        </div>
     {% endif %}
     <div class="followed-and-followers">
+        <h3>Abonnements</h3>
         <div class="followed-users">
-            <h3>Abonnements</h3>
             {% if is_followed_by_user %}
                 {% for user in is_followed_by_user %}
                     <div class="followed-user">
@@ -56,8 +62,8 @@
                 </div>
             {% endif %}
         </div>
+        <h3>Abonnés</h3>
         <div class="followers">
-            <h3>Abonnés</h3>
             {% if is_following_user %}
                 {% for user in is_following_user %}
                         <div class="follower">

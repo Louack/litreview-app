@@ -3,17 +3,18 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>LitReview {% if title  %}| {{ title }} {% endif %}</title>
-        {% block style %} {% endblock %}
+        <title>LITReview {% if title  %}| {{ title }} {% endif %}</title>
+        <link rel="stylesheet" href="{% static 'litreview/css/general.css' %}">
+        {% block style %}{% endblock %}
     </head>
     <body>
         <header>
-            <h1><a href="{% url 'index' %}">LitReview</a></h1>
+            <h1><a href="{% url 'index' %}">LITReview</a></h1>
             {% if request.user.is_authenticated  %}
                 <nav>
                     <a href="{% url 'feed' %}" title="Flux">Flux</a>
-                    <a href="{% url 'user-posts' request.user.slug %}" title="Posts">Posts</a>
-                    <a href="{% url 'user-subs' request.user.slug %}" title="Abonnements">Abonnements</a>
+                    <a href="{% url 'user-posts' request.user.slug %}" title="Mes Publications">Mes Publications</a>
+                    <a href="{% url 'user-subs' request.user.slug %}" title="Mes Abonnements">Mes Abonnements</a>
                     <a href="{% url 'logout' %}" title="Déconnexion">Déconnexion</a>
                 </nav>
             {% endif %}

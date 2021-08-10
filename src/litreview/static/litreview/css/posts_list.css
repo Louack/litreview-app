@@ -1,0 +1,101 @@
+.feed-creation-button {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.posts-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    width: 60vw;
+}
+
+.ticket-display {
+    border: solid;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 20px;
+}
+
+.review-display {
+    border: solid;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 20px;
+}
+
+.ticket-in-review-display {
+    border: solid;
+    margin: 25px;
+    padding: 20px
+}
+
+.ticket-display-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.review-display-head {
+    display: flex;
+    justify-content: space-between;
+}
+
+.review-headline-rating {
+        display: flex;
+        align-items: center;
+    }
+
+.review-headline-rating h3{
+    margin-right: 10px;
+    }
+
+.rating {
+    margin-left: 10px;
+    }    
+
+.edit-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.user-posts {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.user-posts-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    margin-top: 25px;
+}
+
+.user-posts-head h2 {
+    margin: auto;
+    padding-bottom: 20px;
+}
+
+.user-posts-head a {
+    margin: auto;
+    padding-bottom: 20px;
+}
+
+.user-posts-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-posts-body h3{
+    margin: auto;
+}
+

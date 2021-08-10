@@ -82,7 +82,7 @@ class Feed(LoginRequiredMixin, ListView):
 
 class UserPosts(LoginRequiredMixin, SingleObjectMixin, ListView):
     template_name = 'review/posts.html'
-    title = 'Mes Posts'
+    title = 'Mes Publications'
 
     def handle_no_permission(self):
         return redirect('index')
@@ -107,7 +107,7 @@ class UserPosts(LoginRequiredMixin, SingleObjectMixin, ListView):
 
 class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
     template_name = 'review/subs.html'
-    title = 'Abonnements'
+    title = 'Mes Abonnements'
     model = UserFollows
 
     def handle_no_permission(self):
@@ -177,7 +177,6 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
 class UserSubscriptionsUpdate(LoginRequiredMixin, DeletionMixin, CreateView):
     model = UserFollows
     template_name = 'review/subs.html'
-    title = 'Abonnements'
     form_classes = {'select_follow': SelectFollowForm, 'target_follow': LockedFollowForm}
 
     def handle_no_permission(self):
@@ -224,6 +223,7 @@ class UserSubsManagement(View):
 
 
 class PostCreation(LoginRequiredMixin, CreateView):
+    title = 'Création de publication'
     post_type = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -266,6 +266,7 @@ class PostCreation(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edit_type'] = 'creation'
+        context['title'] = self.title
         if self.post_type == 'review':
             context['ticket'] = self.ticket
         return context
@@ -277,7 +278,6 @@ class PostCreation(LoginRequiredMixin, CreateView):
         self.object = None
         if self.post_type == 'double':
             form = self.get_form()
-            print(form['ticket'])
             if form['ticket'].is_valid():
                 self.ticket = self.form_valid(form['ticket'])
                 form['review'].data = form['review'].data.copy()
@@ -315,6 +315,7 @@ class PostDeletion(UserPassesTestMixin, DeleteView):
     post_type = None
     context_object_name = 'post'
     success_url = reverse_lazy('feed')
+    title = 'Suppression de publication'
 
     def get_queryset(self):
         if self.post_type == 'ticket':
@@ -328,15 +329,22 @@ class PostDeletion(UserPassesTestMixin, DeleteView):
         if self.request.user.is_authenticated and self.request.user == self.object.user:
             return True
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.title
+        return context
+
 
 class PostUpdate(UserPassesTestMixin, UpdateView):
     template_name = 'review/simple_post_edit.html'
     post_type = None
     success_url = reverse_lazy('feed')
+    title = 'Modification de publication'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['edit_type'] = 'update'
+        context['title'] = self.title
         if self.post_type == 'review':
             context['ticket'] = self.object.ticket
         return context

@@ -12,19 +12,21 @@
     {% if post.image %}
         <img src="{{post.image.url}}">
     {% endif %}
-    {% if request.user not in post.get_ticket_reviewers %}
-        <form action="{% url 'answer-review-creation' post.pk %}">
-            <input type="submit" value="Répondre" />
-        </form>
-    {% endif %}
-    {% if request.user == post.user %}
-        {% if not post.get_ticket_reviewers %}
-            <form action="{% url 'ticket-update' post.pk %}">
-                <input type="submit" value="Modifier" />
-            </form>
-            <form action="{% url 'ticket-delete' post.pk %}">
-                <input type="submit" value="Supprimer" />
-            </form>
+    <div class="edit-buttons">
+        {% if request.user not in post.get_ticket_reviewers %}
+                <form action="{% url 'answer-review-creation' post.pk %}">
+                    <input type="submit" value="Répondre" />
+                </form>
+            {% endif %}
+            {% if request.user == post.user %}
+                {% if not post.get_ticket_reviewers %}
+                    <form action="{% url 'ticket-update' post.pk %}">
+                        <input type="submit" value="Modifier" />
+                    </form>
+                {% endif %}
+                    <form action="{% url 'ticket-delete' post.pk %}">
+                        <input type="submit" value="Supprimer" />
+                    </form>
         {% endif %}
-    {% endif %}
+    </div>
 </div>

@@ -8,6 +8,13 @@ body {
     color: white;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 header {
     display: flex;
     align-items: center;
@@ -15,11 +22,29 @@ header {
     border-bottom: solid ;
 }
 
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: solid ;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+}
+
 a {
     text-decoration: none;
     color: inherit;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 nav a {
     margin: 1.5vw ;
+}
+
+img {
+    max-width: 200px;
+    height:auto;
 }

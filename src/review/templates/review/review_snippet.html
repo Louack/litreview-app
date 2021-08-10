@@ -1,5 +1,5 @@
 <div class="review-display">
-  <div class="review-display-head">
+    <div class="review-display-head">
         {% if post.user != request.user %}
             <p><a href="{% url 'user-posts' post.user.slug %}" title="profil">{{ post.user }}</a> a publié une critique</p>
         {% else %}
@@ -7,8 +7,11 @@
         {% endif %}
         <p>{{ post.time_created }}</p>
     </div>
-  <h3>{{ post.headline }}</h3>
-  <p>note = {{ post.rating }} </p>
+    <div class="review-headline-rating">
+        <h3>{{ post.headline }}</h3>
+        <p>-</p>
+        <p class="rating">{{ post.rating }}/5 </p>
+    </div>
   <p>{{ post.body }}</p>
   <div class="ticket-in-review-display">
       {% if post.ticket.user != request.user %}
@@ -17,21 +20,25 @@
         <p>Ticket - Vous</p>
       {% endif %}
       <h3>{{ post.ticket.title}}</h3>
-      {% if post.image %}
+      {% if post.ticket.image %}
         <img src="{{post.ticket.image.url}}">
       {% endif %}
       {% if request.user not in post.ticket.get_ticket_reviewers %}
-        <form action="{% url 'answer-review-creation' post.ticket.pk %}">
-            <input type="submit" value="Répondre" />
-        </form>
+          <div class="edit-buttons">
+              <form action="{% url 'answer-review-creation' post.ticket.pk %}">
+                  <input type="submit" value="Répondre" />
+              </form>
+          </div>
       {% endif %}
   </div>
-    {% if request.user == post.user %}
-        <form action="{% url 'review-update' post.pk %}">
-            <input type="submit" value="Modifier" />
-        </form>
-        <form action="{% url 'review-delete' post.pk %}">
-            <input type="submit" value="Supprimer" />
-        </form>
-    {% endif %}
+        {% if request.user == post.user %}
+    <div class="edit-buttons">
+            <form action="{% url 'review-update' post.pk %}">
+                <input type="submit" value="Modifier" />
+            </form>
+            <form action="{% url 'review-delete' post.pk %}">
+                <input type="submit" value="Supprimer" />
+            </form>
+    </div>
+        {% endif %}
 </div>

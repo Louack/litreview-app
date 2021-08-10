@@ -1,25 +1,39 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/style.css' %}">{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/auth.css' %}">{% endblock %}
 {% block main %}
-    {% if title  == 'Connexion'  %}
-        <div>
-            <form action="{% url 'signup' %}">
-                <input type="submit" value="S'inscrire">
-            </form>
+    <div class="auth">
+        <div class="auth-titles">
+            <div class="sub-title">
+                <h2>Inscrivez-vous</h2>
+            </div>
+            {% if title  == 'Connexion'  %}
+                <div class="connect-tilte">
+                    <h2>Connectez-vous</h2>
+                </div>
+            {% endif %}
         </div>
-    {% endif %}
-    <div>
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            {% for message in errors.values %}
-                <h3 style="color: red;">
-                    {{ message }}
-                </h3>
-            {% endfor %}
-            <input type="submit" value="{{ title }}">
-        </form>
+        <div class="auth-forms">
+        {% if title  == 'Connexion'  %}
+            <div class="subscribe">
+                <form action="{% url 'signup' %}">
+                    <input type="submit" value="S'inscrire">
+                </form>
+            </div>
+        {% endif %}
+        <div class="connect">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% for message in errors.values %}
+                    <h3 style="color: red;">
+                        {{ message }}
+                    </h3>
+                {% endfor %}
+                <input type="submit" class="submit-button" value="{{ title }}">
+            </form>
+          </div>
+        </div>
     </div>
 {% endblock %}

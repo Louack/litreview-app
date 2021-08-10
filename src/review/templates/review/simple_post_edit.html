@@ -1,16 +1,23 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/post_edit.css' %}">{% endblock %}
 {% block main %}
+    {% if form.ticket %}
+        <h3>Créer un ticket</h3>
+    {% else %}
+        <h3>Créer une critique</h3>
+    {% endif %}
 <div class="post-edit">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {% if form.ticket %}
-            {% include 'review/ticket_edit_snippet.html' %}
+            <div class="ticket-edit-wrapper">
+                {% include 'review/ticket_edit_snippet.html' %}
+            </div>
         {% else %}
             <div class="ticket-wrapper">
-                <p>Vous êtes en train de poster en réponse à</p>
+                <p>Vous êtes en train de poster en réponse à :</p>
                 <div class="ticket-peak">
                     <div class="ticket-peak-head">
                         {% if ticket.user != request.user %}
