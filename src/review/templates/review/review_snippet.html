@@ -15,9 +15,9 @@
   <p>{{ post.body }}</p>
   <div class="ticket-in-review-display">
       {% if post.ticket.user != request.user %}
-        <p>Ticket - <a href="{% url 'user-posts' post.ticket.user.slug %}" title="profil">{{ post.ticket.user }}</a></p>
+        <p>Ticket de <a href="{% url 'user-posts' post.ticket.user.slug %}" title="profil">{{ post.ticket.user }}</a></p>
       {% else %}
-        <p>Ticket - Vous</p>
+        <p>Votre ticket</p>
       {% endif %}
       <h3>{{ post.ticket.title}}</h3>
       {% if post.ticket.image %}

@@ -3,17 +3,20 @@
 
 {% block style %}<link rel="stylesheet" href="{% static 'litreview/css/post_edit.css' %}">{% endblock %}
 {% block main %}
-<h3>Créer une critique</h3>
+<h3>Création d'une critique</h3>
     <form method="POST" class="post-edit" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="ticket-edit-wrapper">
             <h3>Livre / Article</h3>
-        {% include 'review/ticket_edit_snippet.html' %}
+            {% include 'review/ticket_edit_snippet.html' %}
         </div>
         <div class="review-edit-wrapper">
             <h3>Critique</h3>
             {% include 'review/review_edit_snippet.html' %}
         </div>
-             <input type="submit" class="submit-double" name ="ticket-review-creation" value="Créer">
+        <div class="submit-double">
+            <input type="submit" class="submit-double" name ="ticket-review-creation" value="Créer">
+            <button><a href="{% url 'feed' %}" title="Flux">Retour vers le Flux</a></button>
+        </div>
     </form>
 {% endblock %}

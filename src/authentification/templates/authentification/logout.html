@@ -1,10 +1,12 @@
 {% extends 'litreview/base.html' %}
 {% load static %}
 
-{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/style.css' %}">{% endblock %}
+{% block style %}<link rel="stylesheet" href="{% static 'litreview/css/general.css' %}">{% endblock %}
 {% block main %}
-    <p>Déconnexion réussie, à bientôt !</p>
-    <form action="{% url 'index' %}">
-        <input type="submit" value="Retour à l'accueil">
-    </form>
+    <div class="logout">
+        <p>Déconnexion réussie, à bientôt !</p>
+        <form action="{% url 'index' %}">
+            <input type="submit" value="Retour à l'accueil">
+        </form>
+    </div>
 {% endblock %}

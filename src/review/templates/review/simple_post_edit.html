@@ -4,9 +4,9 @@
 {% block style %}<link rel="stylesheet" href="{% static 'litreview/css/post_edit.css' %}">{% endblock %}
 {% block main %}
     {% if form.ticket %}
-        <h3>Créer un ticket</h3>
+        <h3>Création d'un ticket</h3>
     {% else %}
-        <h3>Créer une critique</h3>
+        <h3>Création d'une critique</h3>
     {% endif %}
 <div class="post-edit">
     <form method="POST" enctype="multipart/form-data">
@@ -39,11 +39,14 @@
                 {% include 'review/review_edit_snippet.html' %}
             </div>
         {% endif %}
+        <div class="edit-buttons">
             {% if edit_type == 'creation' %}
                 <input type="submit" name ="creation" value="Créer">
             {% elif edit_type == 'update' %}
                 <input type="submit" name ="update" value="Modifier">
             {% endif %}
+            <button><a href="{% url 'feed' %}" title="Flux">Retour vers le Flux</a></button>
+        </div>
     </form>
 </div>
 {% endblock %}

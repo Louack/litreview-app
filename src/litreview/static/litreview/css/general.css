@@ -3,7 +3,7 @@
 body {
     margin-left: 2.5%;
     margin-right: 2.5%;
-    background-color: SteelBlue;
+    background-color: rgb(44, 58, 58);
     font-family: Arial, Helvetica, sans-serif;
     color: white;
 }
@@ -13,6 +13,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: 80vh;
 }
 
 header {
@@ -20,6 +21,10 @@ header {
     align-items: center;
     justify-content: space-between;
     border-bottom: solid ;
+}
+
+header h1 a:hover{
+    text-decoration: none;
 }
 
 footer {
@@ -47,4 +52,54 @@ nav a {
 img {
     max-width: 200px;
     height:auto;
+}
+
+input[type=submit] {
+    font-size: 1.1rem;
+    background-color: rgb(44, 58, 58);
+    color: white;
+    border: solid;
+    border-width: 1px;
+    -webkit-border-radius: 5px;
+    border-radius: 7.5px; 
+    cursor:pointer;
+    transition: all 0.25s;
+}
+
+input[type=submit]:hover {
+    
+    color: rgb(44, 58, 58);
+    background-color: white;
+    cursor: pointer;
+}
+
+button {
+    font-size: 1.1rem;
+    background-color: rgb(44, 58, 58);
+    color: white;
+    border: solid;
+    border-width: 1px;
+    -webkit-border-radius: 5px;
+    border-radius: 7.5px; 
+    cursor:pointer;
+    transition: all 0.25s;
+}
+
+button:hover {
+    color: rgb(44, 58, 58);
+    background-color: white;
+    cursor: pointer;
+}
+
+button a:hover {
+    text-decoration: none;
+}
+
+.logout {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
 }

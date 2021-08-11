@@ -4,19 +4,11 @@
 {% block style %}<link rel="stylesheet" href="{% static 'litreview/css/auth.css' %}">{% endblock %}
 {% block main %}
     <div class="auth">
-        <div class="auth-titles">
-            <div class="sub-title">
-                <h2>Inscrivez-vous</h2>
-            </div>
-            {% if title  == 'Connexion'  %}
-                <div class="connect-tilte">
-                    <h2>Connectez-vous</h2>
-                </div>
-            {% endif %}
-        </div>
-        <div class="auth-forms">
         {% if title  == 'Connexion'  %}
             <div class="subscribe">
+                <div class="subscribe-tilte">
+                    <h2>Inscrivez-vous</h2>
+                </div>
                 <form action="{% url 'signup' %}">
                     <input type="submit" value="S'inscrire">
                 </form>
@@ -24,6 +16,9 @@
         {% endif %}
         <div class="connect">
             <form method="POST">
+                <div class="connect-title">
+                    <h2>Connectez-vous</h2>
+                </div>
                 {% csrf_token %}
                 {{ form.as_p }}
                 {% for message in errors.values %}
@@ -31,9 +26,13 @@
                         {{ message }}
                     </h3>
                 {% endfor %}
-                <input type="submit" class="submit-button" value="{{ title }}">
+                <div class="submit-button">
+                    <input type="submit"  value="{{ title }}">
+                    {% if title  == 'Inscription'  %}
+                    <button><a href="{% url 'login' %}" title="Accueil">Retour</a></button>
+                    {% endif %}
+                </div>
             </form>
           </div>
-        </div>
     </div>
 {% endblock %}

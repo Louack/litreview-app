@@ -7,12 +7,10 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="delete">
-            <p>Voulez-vous vraiment supprimer {{ post.title }}</p>
+            <p>Voulez-vous vraiment supprimer {{ post.title }} ?</p>
             <div class="delete-buttons">
                 <input type="submit" name ="select_follow" value="Supprimer">
-                <form action="{% url 'feed' %}">
-                    <input type="submit" value="Retour vers le flux" />
-                </form>
+                <button><a href="{% url 'feed' %}" title="Flux">Retour vers le Flux</a></button>
             </div>
         </div>
     </form>

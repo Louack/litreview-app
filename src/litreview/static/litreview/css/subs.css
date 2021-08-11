@@ -15,21 +15,22 @@
 }
 
 .followed-users {
-    border-top: solid;
+    border: solid;
     margin-top: 10px;
     margin-bottom: 10px;
+    -webkit-border-radius: 5px;
+    border-radius: 20px; 
 }
 
 .followers {
-    border-top: solid;
+    border: solid;
+    -webkit-border-radius: 5px;
+    border-radius: 20px; 
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
 .followed-user {
-    border-bottom: solid;
-    border-right: solid;
-    border-left: solid;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -41,9 +42,6 @@
 }
 
 .follower {
-    border-bottom: solid;
-    border-right: solid;
-    border-left: solid;
     display: flex;
     align-items: center;
 }
@@ -79,6 +77,10 @@
     border-bottom: solid;
     padding-top: 20px;
     border-top: solid;
+}
+
+.subs-head form > *{
+    margin: 10px;
 }
 
 .subs-head h2 {

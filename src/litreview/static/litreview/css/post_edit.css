@@ -1,15 +1,16 @@
 .post-edit {
     border:solid;
     padding: 20px;
-    width: 60vw;
+    width: 50vw;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    -webkit-border-radius: 5px;
+    border-radius: 20px; 
 }
 
-.post-edit {
-    border:solid;
-    padding: 20px;
+.post-edit * {
+    margin:5px;
 }
 
 .submit-double {
@@ -27,6 +28,8 @@
 .ticket-peak {
     border:solid;
     padding: 20px;
+    -webkit-border-radius: 5px;
+    border-radius: 20px; 
 }
 
 .ticket-peak-head {

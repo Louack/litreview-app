@@ -13,8 +13,8 @@
             {% if request.user.is_authenticated  %}
                 <nav>
                     <a href="{% url 'feed' %}" title="Flux">Flux</a>
-                    <a href="{% url 'user-posts' request.user.slug %}" title="Mes Publications">Mes Publications</a>
-                    <a href="{% url 'user-subs' request.user.slug %}" title="Mes Abonnements">Mes Abonnements</a>
+                    <a href="{% url 'user-posts' request.user.slug %}" title="Mes publications">Mes publications</a>
+                    <a href="{% url 'user-subs' request.user.slug %}" title="Mes abonnements">Mes abonnements</a>
                     <a href="{% url 'logout' %}" title="Déconnexion">Déconnexion</a>
                 </nav>
             {% endif %}
