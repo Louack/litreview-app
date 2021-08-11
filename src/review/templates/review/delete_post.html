@@ -7,7 +7,7 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="delete">
-            <p>Voulez-vous vraiment supprimer {{ post.title }} ?</p>
+            <p>Voulez-vous vraiment supprimer cette publication ?</p>
             <div class="delete-buttons">
                 <input type="submit" name ="select_follow" value="Supprimer">
                 <button><a href="{% url 'feed' %}" title="Flux">Retour vers le Flux</a></button>

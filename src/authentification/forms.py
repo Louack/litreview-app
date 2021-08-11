@@ -13,5 +13,3 @@ class CustomSignUpForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ['username']
-
-

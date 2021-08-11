@@ -19,3 +19,8 @@ def error_404(request, exception):
     response.status_code = 404
     return response
 
+
+def error_500(request):
+    response = render(request, 'litreview/404_or_500_error.html')
+    response.status_code = 500
+    return response

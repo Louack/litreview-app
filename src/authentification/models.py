@@ -83,4 +83,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         if not self.slug:
             self.slug = self.get_unique_slug()
         super().save(*args, **kwargs)
-

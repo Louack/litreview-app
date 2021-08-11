@@ -7,7 +7,7 @@ urlpatterns = [
     path('<str:slug>/', UserPosts.as_view(paginate_by=settings.PAGINATION), name='user-posts'),
     path('<str:slug>/follows/', UserSubsManagement.as_view(), name='user-subs'),
     path('create/ticket/', PostCreation.as_view(post_type='ticket'), name='ticket-creation'),
-    path('create/answer-review/<str:pk>/', PostCreation.as_view(post_type='review'),name='answer-review-creation'),
+    path('create/answer-review/<str:pk>/', PostCreation.as_view(post_type='review'), name='answer-review-creation'),
     path('create/direct-review/', PostCreation.as_view(post_type='double'), name='direct-review-creation'),
     path('update/ticket/<str:pk>/', PostUpdate.as_view(post_type='ticket'), name='ticket-update'),
     path('update/review/<str:pk>/', PostUpdate.as_view(post_type='review'), name='review-update'),

@@ -222,14 +222,9 @@ class UserSubsManagement(View):
         return view(request, *args, **kwargs)
 
 
-class PostCreation(LoginRequiredMixin, CreateView):
+class PostCreation(UserPassesTestMixin, CreateView):
     title = 'Création de publication'
     post_type = None
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.post_type == 'review':
-            self.ticket = self.get_object(queryset=Ticket.objects.all())
-        return super().dispatch(request)
 
     def form_valid(self, form):
         if self.post_type == 'double':
@@ -303,11 +298,13 @@ class PostCreation(LoginRequiredMixin, CreateView):
                 return self.form_invalid(form)
 
     def test_func(self):
-        if not self.request.user.is_authenticated:
-            return True
-
-    def handle_no_permission(self):
-        return redirect('index')
+        if self.request.user.is_authenticated:
+            if self.post_type == 'review':
+                self.ticket = self.get_object(queryset=Ticket.objects.all())
+                if self.request.user not in self.ticket.get_ticket_reviewers():
+                    return True
+            else:
+                return True
 
 
 class PostDeletion(UserPassesTestMixin, DeleteView):
@@ -379,5 +376,8 @@ class PostUpdate(UserPassesTestMixin, UpdateView):
     def test_func(self):
         self.object = self.get_object()
         if self.request.user == self.object.user:
-            return True
-
+            if self.post_type == 'ticket':
+                if self.request.user not in self.object.get_ticket_reviewers():
+                    return True
+            else:
+                return True
