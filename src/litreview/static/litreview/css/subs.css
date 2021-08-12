@@ -15,22 +15,21 @@
 }
 
 .followed-users {
-    border: solid;
+    border-top: solid;
     margin-top: 10px;
     margin-bottom: 10px;
-    -webkit-border-radius: 5px;
-    border-radius: 20px; 
 }
 
 .followers {
-    border: solid;
-    -webkit-border-radius: 5px;
-    border-radius: 20px; 
+    border-top: solid;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
 .followed-user {
+    border-bottom: solid;
+    border-right: solid;
+    border-left: solid;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,6 +41,9 @@
 }
 
 .follower {
+    border-bottom: solid;
+    border-right: solid;
+    border-left: solid;
     display: flex;
     align-items: center;
 }

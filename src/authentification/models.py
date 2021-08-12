@@ -70,6 +70,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return True
 
     def get_unique_slug(self):
+        """
+        generates a unique slug per user. slug to be used to access user posts list and subscriptions pages
+        """
         count = 0
         for user in CustomUser.objects.all():
             if user != self:
@@ -80,6 +83,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return slug
 
     def save(self, *args, **kwargs):
+        """
+        modified to attribute a unique slug before first save.
+        """
         if not self.slug:
             self.slug = self.get_unique_slug()
         super().save(*args, **kwargs)

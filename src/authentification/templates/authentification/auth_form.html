@@ -17,7 +17,11 @@
         <div class="connect">
             <form method="POST">
                 <div class="connect-title">
-                    <h2>Connectez-vous</h2>
+                    {% if title  == 'Connexion'  %}
+                        <h2>Connectez-vous</h2>
+                    {% elif title  == 'Inscription'  %}
+                        <h2>Inscrivez-vous</h2>
+                    {% endif %}
                 </div>
                 {% csrf_token %}
                 {{ form.as_p }}

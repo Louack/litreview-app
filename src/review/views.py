@@ -14,6 +14,9 @@ from authentification.models import CustomUser
 
 
 class Feed(LoginRequiredMixin, ListView):
+    """
+    View called to display the user feed. Displays an objects list (posts)
+    """
     template_name = 'review/feed.html'
     title = 'Flux'
     context_object_name = 'posts'
@@ -22,6 +25,9 @@ class Feed(LoginRequiredMixin, ListView):
         return redirect('index')
 
     def get_queryset(self):
+        """
+        modified to obtain the required objects_list to display on the feed
+        """
         followed_users = self.get_followed_users()
         posts = self.all_posts_combined_and_sorted(followed_users)
         return posts
@@ -69,6 +75,10 @@ class Feed(LoginRequiredMixin, ListView):
         return non_followers_reviews
 
     def all_posts_combined_and_sorted(self, followed_users):
+        """
+        get all posts from followed users and from non-followed users who answered a ticket of the request.user.
+        sorts the posts by datetime (most recent on top)
+        """
         user_tickets = self.request.user.ticket_set.all()
         user_reviews = self.request.user.review_set.all()
         followed_users_tickets = self.get_followed_users_tickets(followed_users)
@@ -81,6 +91,9 @@ class Feed(LoginRequiredMixin, ListView):
 
 
 class UserPosts(LoginRequiredMixin, SingleObjectMixin, ListView):
+    """
+    View called to display the user posts list. Displays an objects list (posts)
+    """
     template_name = 'review/posts.html'
     title = 'Mes Publications'
 
@@ -88,6 +101,9 @@ class UserPosts(LoginRequiredMixin, SingleObjectMixin, ListView):
         return redirect('index')
 
     def get_queryset(self):
+        """
+        modified to obtain the required objects_list to display on the targeted user posts list page.
+        """
         target_tickets = self.object.ticket_set.all()
         target_reviews = self.object.review_set.all()
         posts = sorted(chain(target_tickets, target_reviews), key=lambda post: post.time_created, reverse=True)
@@ -106,6 +122,12 @@ class UserPosts(LoginRequiredMixin, SingleObjectMixin, ListView):
 
 
 class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
+    """
+    View called to display the a user's followed users and followers.
+    Displays two objects list (followed users and followers) associated with the target user.
+    Also displays forms to subscribe/unscribe to other users to be used in the UserSubscriptionsUpdate view.
+    This view is built to display whether the request user subscriptions list or an other user
+    """
     template_name = 'review/subs.html'
     title = 'Mes Abonnements'
     model = UserFollows
@@ -114,14 +136,24 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
         return redirect('index')
 
     def get_queryset(self):
+        """
+        modified to obtain the followed and following users as the objects list used by  the listView parent class
+        """
         subs = self.get_followed_and_following_users()
         return subs
 
     def get(self, request, *args, **kwargs):
+        """
+        modified to obtain the target user as the object used by the SingleObjectMixin parent class
+        """
         self.object = self.get_object(queryset=CustomUser.objects.all())
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        """
+        modified to implement different kind of subscription form based on the status of the targeted user
+        (authenticated user or not)
+        """
         context = super().get_context_data(**kwargs)
         context['title'] = self.title
         context['target_user'] = self.object
@@ -159,6 +191,9 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
         return sub_types
 
     def get_home_subs_forms(self):
+        """
+        forms to get if the targeted user is the request user
+        """
         couples = UserFollows.objects.all()
         home_forms = {}
         can_unfollow = []
@@ -171,10 +206,17 @@ class UserSubscriptionsList(LoginRequiredMixin, SingleObjectMixin, ListView):
         return home_forms
 
     def get_foreign_sub_form(self):
+        """
+        form to get if the targeted user is not the request user
+        """
         return LockedFollowForm(initial={'user': self.request.user, 'followed_user': self.object})
 
 
 class UserSubscriptionsUpdate(LoginRequiredMixin, DeletionMixin, CreateView):
+    """
+    View that allows the creation or deletion of UserFollows object on the forms displayed by the
+    UserSubscriptionsList view
+    """
     model = UserFollows
     template_name = 'review/subs.html'
     form_classes = {'select_follow': SelectFollowForm, 'target_follow': LockedFollowForm}
@@ -200,19 +242,22 @@ class UserSubscriptionsUpdate(LoginRequiredMixin, DeletionMixin, CreateView):
         else:
             return super(CreateView, self).post(self, request, *args, **kwargs)
 
-    def get_userfollows(self):
-        userfollows = UserFollows.objects.filter(user_id=self.request.POST['user'],
+    def get_userfollow(self):
+        userfollow = UserFollows.objects.filter(user_id=self.request.POST['user'],
                                                  followed_user=self.request.POST['followed_user'])
-        return userfollows
+        return userfollow
 
     def delete(self, request, *args, **kwargs):
-        userfollows = self.get_userfollows()
+        userfollow = self.get_userfollow()
         success_url = self.get_success_url()
-        userfollows.delete()
+        userfollow.delete()
         return HttpResponseRedirect(success_url)
 
 
 class UserSubsManagement(View):
+    """
+    Depending on the type of requests, directs to the corresponding view
+    """
     def get(self, request, *args, **kwargs):
         view = UserSubscriptionsList.as_view(paginate_by=settings.PAGINATION)
         return view(request, *args, **kwargs)
@@ -223,6 +268,10 @@ class UserSubsManagement(View):
 
 
 class PostCreation(UserPassesTestMixin, CreateView):
+    """
+    View allowing to create all 3 types of posts based on the value of the post_type attribute passed in the
+     urls.py file. Several methods are modified to handle the different scenario.
+    """
     title = 'Création de publication'
     post_type = None
 
@@ -308,6 +357,10 @@ class PostCreation(UserPassesTestMixin, CreateView):
 
 
 class PostDeletion(UserPassesTestMixin, DeleteView):
+    """
+    View allowing to delete the 2 types of posts based on the value of the post_type attribute passed in the
+    urls.py file. Several methods are modified to handle the 2 scenario.
+    """
     template_name = 'review/delete_post.html'
     post_type = None
     context_object_name = 'post'
@@ -333,6 +386,10 @@ class PostDeletion(UserPassesTestMixin, DeleteView):
 
 
 class PostUpdate(UserPassesTestMixin, UpdateView):
+    """
+    View allowing to delete the 2 types of posts based on the value of the post_type attribute passed in the
+    urls.py file. Several methods are modified to handle the 2 scenario.
+    """
     template_name = 'review/simple_post_edit.html'
     post_type = None
     success_url = reverse_lazy('feed')

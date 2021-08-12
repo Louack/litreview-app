@@ -39,6 +39,11 @@ class Ticket(models.Model):
         return self._meta.verbose_name
 
     def get_ticket_reviewers(self):
+        """
+        allows to check all the reviewers of a ticket.
+        Useful to forbid a user to post several reviews for the same ticket
+        or to prevent the ticket modification if there is already one review.
+        """
         reviews = [review for review in self.review_set.all()]
         reviewers = [review.user for review in reviews]
         return reviewers

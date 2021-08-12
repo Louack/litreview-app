@@ -6,6 +6,9 @@ RATING_SCALE = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
 
 
 class SelectFollowForm(forms.ModelForm):
+    """
+    Form to create UserFollow object. Lock the user as the request user but allow the selection of the followd user
+    """
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         can_follow_users = self.get_can_follow_users(user)
@@ -18,6 +21,9 @@ class SelectFollowForm(forms.ModelForm):
         labels = {'followed_user': 'Sélectionnez un utilisateur à suivre'}
 
     def get_can_follow_users(self, user):
+        """
+        generates dynamic choices list of users that can be followed
+        """
         couples = UserFollows.objects.all()
         users_list = list(CustomUser.objects.all())
         users_list.remove(user)
@@ -32,6 +38,9 @@ class SelectFollowForm(forms.ModelForm):
 
 
 class LockedFollowForm(forms.ModelForm):
+    """
+    Form to create UserFollow object. Lock the user as the request user and the followed user as a target user
+    """
     class Meta:
         model = UserFollows
         fields = ['user', 'followed_user']
