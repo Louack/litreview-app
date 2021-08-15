@@ -94,6 +94,14 @@ class Review(models.Model):
     def get_verbose_name(self):
         return self._meta.verbose_name
 
+    def get_full_stars(self):
+        full_stars = '*' * self.rating
+        return full_stars
+
+    def get_empty_stars(self):
+        empty_stars = '*' * (5 -self.rating)
+        return empty_stars
+
 
 class UserFollows(models.Model):
     user = models.ForeignKey(

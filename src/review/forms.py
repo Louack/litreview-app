@@ -5,6 +5,14 @@ from authentification.models import CustomUser
 RATING_SCALE = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
 
 
+class CustomClear(forms.ClearableFileInput):
+    """
+    Redirects to a custom image widget template displaying the image itself instead of the image path.
+    """
+    template_name = 'review/custom_image_widget.html'
+    input_text = 'Modifier'
+
+
 class SelectFollowForm(forms.ModelForm):
     """
     Form to create UserFollow object. Lock the user as the request user but allow the selection of the followd user
@@ -22,7 +30,7 @@ class SelectFollowForm(forms.ModelForm):
 
     def get_can_follow_users(self, user):
         """
-        generates dynamic choices list of users that can be followed
+        Generates dynamic choices list of users that can be followed
         """
         couples = UserFollows.objects.all()
         users_list = list(CustomUser.objects.all())
@@ -52,7 +60,8 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         exclude = ['time_created']
-        widgets = {'user': forms.HiddenInput()}
+        widgets = {'user': forms.HiddenInput(),
+                   'image': CustomClear()}
 
 
 class ReviewForm(forms.ModelForm):

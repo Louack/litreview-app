@@ -320,8 +320,8 @@ class PostCreation(UserPassesTestMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         self.object = None
+        form = self.get_form()
         if self.post_type == 'double':
-            form = self.get_form()
             if form['ticket'].is_valid():
                 self.ticket = self.form_valid(form['ticket'])
                 form['review'].data = form['review'].data.copy()
@@ -334,13 +334,11 @@ class PostCreation(UserPassesTestMixin, CreateView):
             else:
                 return self.form_invalid(form)
         elif self.post_type == 'ticket':
-            form = self.get_form()
             if form['ticket'].is_valid():
                 return self.form_valid(form['ticket'])
             else:
                 return self.form_invalid(form)
         elif self.post_type == 'review':
-            form = self.get_form()
             if form['review'].is_valid():
                 return self.form_valid(form['review'])
             else:

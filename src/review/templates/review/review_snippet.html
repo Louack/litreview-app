@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="review-display">
     <div class="review-display-head">
         {% if post.user != request.user %}
@@ -10,7 +12,12 @@
     <div class="review-headline-rating">
         <h3>{{ post.headline }}</h3>
         <p>-</p>
-        <p class="rating">{{ post.rating }}/5 </p>
+        {% for stars in post.get_full_stars %}
+            <img class=star src="{% static 'litreview/svg/star-full.svg' %}">
+        {% endfor %}
+        {% for stars in post.get_empty_stars %}
+            <img class=star src="{% static 'litreview/svg/star-empty.svg' %}">
+        {% endfor %}
     </div>
   <p>{{ post.body }}</p>
   <div class="ticket-in-review-display">

@@ -36,8 +36,8 @@
     {% endif %}
     <div class="followed-and-followers">
         <h3>Abonnements</h3>
-        <div class="followed-users">
-            {% if is_followed_by_user %}
+        {% if is_followed_by_user %}
+            <div class="followed-users">
                 {% for user in is_followed_by_user %}
                     <div class="followed-user">
                         {% if  user == request.user %}
@@ -47,24 +47,24 @@
                         {% endif %}
                     {% for form in unfollow_forms %}
                         {% if form.initial.followed_user == user %}
-                            <form method="POST">
+                             <form method="POST">
                                 {% csrf_token %}
-                                {{ form.as_p }}
+                                {{ form }}
                                 <input type="submit" name="unfollow" value="Se désabonner">
                             </form>
                         {% endif %}
                     {% endfor %}
                     </div>
                 {% endfor %}
+                </div>
             {% else %}
-                <div>
+                <div class="no-followed-users">
                     <p>Aucun abonnement</p>
                 </div>
             {% endif %}
-        </div>
         <h3>Abonnés</h3>
-        <div class="followers">
             {% if is_following_user %}
+                <div class="followers">
                 {% for user in is_following_user %}
                         <div class="follower">
                             {% if  user == request.user %}
@@ -75,8 +75,9 @@
                         </div>
                 {% endfor %}
             {% else %}
-                <div>
+                <div class="no-followers">
                     <p>Aucun abonné</p>
+                </div>
                 </div>
             {% endif %}
         </div>

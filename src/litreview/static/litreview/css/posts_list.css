@@ -65,10 +65,6 @@
     margin-right: 10px;
     }
 
-.rating {
-    margin-left: 10px;
-    }    
-
 .edit-buttons {
     display: flex;
     justify-content: flex-end;
@@ -111,4 +107,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.star {
+    margin-left: 10px;
+    width: 18px;
+    height: 18px;
 }
